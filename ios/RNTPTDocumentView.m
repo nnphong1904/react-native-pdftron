@@ -314,6 +314,31 @@ NS_ASSUME_NONNULL_END
     [rightItem insertObject:newMoreButton atIndex:indexMoreButton];
     self.documentViewController.navigationItem.rightBarButtonItems = [rightItem copy];
     
+    NSMutableArray* bottomItems = [self.documentViewController.toolbarItems mutableCopy];
+    
+    UIImage *thumbnailIcon = [UIImage imageNamed:@"basic_thumbnail"];
+    UIBarButtonItem *newThumbnailButton = [[UIBarButtonItem alloc] initWithImage:thumbnailIcon style:UIBarButtonItemStylePlain target:self.documentViewController.thumbnailsButtonItem.target action:self.documentViewController.thumbnailsButtonItem.action];
+    [newThumbnailButton setTintColor:[UIColor colorWithRed:97/255.0f green:130/255.0f blue:152/255.0f alpha:1.0f]];
+    NSUInteger thumbnailIndex = [bottomItems indexOfObject:self.documentViewController.thumbnailsButtonItem];
+    [bottomItems removeObject:self.documentViewController.thumbnailsButtonItem];
+    [bottomItems insertObject:newThumbnailButton atIndex:thumbnailIndex];
+    
+    UIImage *navigationListIcon = [UIImage imageNamed:@"basic_navigation_list"];
+    UIBarButtonItem *newNavigationListButton = [[UIBarButtonItem alloc] initWithImage:navigationListIcon style:UIBarButtonItemStylePlain target:self.documentViewController.navigationListsButtonItem.target action:self.documentViewController.navigationListsButtonItem.action];
+    [newNavigationListButton setTintColor:[UIColor colorWithRed:97/255.0f green:130/255.0f blue:152/255.0f alpha:1.0f]];
+    NSUInteger navigationListIndex = [bottomItems indexOfObject:self.documentViewController.navigationListsButtonItem];
+    [bottomItems removeObject:self.documentViewController.navigationListsButtonItem];
+    [bottomItems insertObject:newNavigationListButton atIndex:navigationListIndex];
+    
+    
+    self.documentViewController.toolbarItems = [bottomItems copy];
+    
+    self.documentViewController.readerModeButtonHidden = YES;
+    
+    PTDocumentController *myController = (PTDocumentController *)self.documentViewController;
+    myController.toolGroupManager.selectedGroup = myController.toolGroupManager.viewItemGroup;
+    
+    
     [self openDocument];
 }
 
