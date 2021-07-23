@@ -284,6 +284,36 @@ NS_ASSUME_NONNULL_END
         }
     }
     
+    // Custom navigation list items
+    // search button
+    UIImage *searchIcon = [UIImage imageNamed:@"basic_search"];
+    UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [searchButton setImage:searchIcon forState:UIControlStateNormal];
+    [searchButton addTarget:self.documentViewController.searchButtonItem.target action:self.documentViewController.searchButtonItem.action forControlEvents:UIControlEventTouchUpInside];
+    [searchButton.widthAnchor constraintEqualToConstant:40].active = YES;
+    [searchButton.heightAnchor constraintEqualToConstant:40].active = YES;
+    UIBarButtonItem *newSearchButton = [[UIBarButtonItem alloc] initWithCustomView:searchButton];
+    // three dot butoon
+    UIImage *moreIcon = [UIImage imageNamed:@"basic_more_horizontal"];
+
+    UIBarButtonItem *newMoreButton = [[UIBarButtonItem alloc] initWithImage:moreIcon style:UIBarButtonItemStylePlain target:self action:self.documentViewController.moreItemsButtonItem.action];
+    [newMoreButton setTintColor:[UIColor colorWithRed:97/255.0f green:130/255.0f blue:152/255.0f alpha:1.0f]];
+    if (@available(iOS 14.0, *)) {
+        newMoreButton.action = nil;
+        newMoreButton.menu = self.documentViewController.moreItemsButtonItem.menu;
+    }
+    newMoreButton.target = self;
+    NSMutableArray* rightItem = [self.documentViewController.navigationItem.rightBarButtonItems mutableCopy];
+    
+    NSUInteger indexSearchButton = [rightItem indexOfObject:self.documentViewController.searchButtonItem];
+    [rightItem removeObject:self.documentViewController.searchButtonItem];
+    [rightItem insertObject:newSearchButton atIndex:indexSearchButton];
+    
+    NSUInteger indexMoreButton = [rightItem indexOfObject:self.documentViewController.moreItemsButtonItem];
+    [rightItem removeObject:self.documentViewController.moreItemsButtonItem];
+    [rightItem insertObject:newMoreButton atIndex:indexMoreButton];
+    self.documentViewController.navigationItem.rightBarButtonItems = [rightItem copy];
+    
     [self openDocument];
 }
 
