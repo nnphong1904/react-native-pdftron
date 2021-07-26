@@ -1776,6 +1776,9 @@ NS_ASSUME_NONNULL_END
     
     documentViewController.hidesControlsOnTap = self.hideToolbarsOnTap;
     
+    // Scrollbars.
+    [self applyScrollbarVisibility:documentViewController];
+    
     // Document slider.
     ((PTDocumentController*)documentViewController).documentSliderEnabled = self.documentSliderEnabled;
     
@@ -4197,6 +4200,37 @@ NS_ASSUME_NONNULL_END
     };
     
     return scrollPos;
+}
+
+#pragma mark - Scrollbars
+
+- (void)setHideScrollbars:(BOOL)hideScrollbars
+{
+    _hideScrollbars = hideScrollbars;
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
+    }
+}
+
+- (void)applyScrollbarVisibility:(PTDocumentBaseViewController *)documentBaseViewController
+{
+    const BOOL hideScrollbars = self.hideScrollbars;
+    
+    if ([documentBaseViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController * const documentController = (PTDocumentController *)documentBaseViewController;
+        
+        documentController.documentSliderViewController.hidesPDFViewCtrlScrollIndicators = hideScrollbars;
+    }
+    
+    PTPDFViewCtrl* pdfViewCtrl = documentBaseViewController.pdfViewCtrl;
+    if (pdfViewCtrl) {
+        pdfViewCtrl.contentScrollView.showsHorizontalScrollIndicator = !hideScrollbars;
+        pdfViewCtrl.contentScrollView.showsVerticalScrollIndicator = !hideScrollbars;
+        
+        pdfViewCtrl.pagingScrollView.showsHorizontalScrollIndicator = !hideScrollbars;
+        pdfViewCtrl.pagingScrollView.showsVerticalScrollIndicator = !hideScrollbars;
+    }
 }
 
 #pragma mark - Canvas Size
