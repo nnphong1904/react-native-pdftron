@@ -15,6 +15,8 @@
 
 - (void)setToolModeForDocumentViewTag:(NSNumber *)tag toolMode:(NSString *)toolMode;
 
+- (void)openCommentListForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId;
+
 - (BOOL)commitToolForDocumentViewTag:(NSNumber *)tag;
 
 - (NSString *)getDocumentPathForDocumentViewTag:(NSNumber *)tag;

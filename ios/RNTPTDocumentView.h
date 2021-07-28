@@ -430,6 +430,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setToolMode:(NSString *)toolMode;
 
+- (void)openCommentList:(NSString *)annotationId;
+
 - (BOOL)commitTool;
 
 - (int)getPageCount;

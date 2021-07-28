@@ -889,6 +889,14 @@ export default class DocumentView extends PureComponent {
     this._viewerRef = ref;
   };
 
+  openCommentList = (annotationId) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openCommentList(tag, annotationId);
+    }
+    return Promise.resolve();
+  }
+
   render() {
     return (
       <RCTDocumentView

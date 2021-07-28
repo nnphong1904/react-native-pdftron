@@ -46,6 +46,20 @@ RCT_REMAP_METHOD(setToolMode,
     }
 }
 
+RCT_REMAP_METHOD(openCommentList,
+                 openCommentListForDocumentViewTag:(nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject){
+    @try {
+        [[self documentViewManager] openCommentListForDocumentViewTag:tag annotationId:annotationId];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"commit_tool", @"Failed to commit tool", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(commitTool,
                  commitToolForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve

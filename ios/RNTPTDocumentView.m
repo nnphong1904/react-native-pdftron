@@ -933,6 +933,26 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)openCommentList:(NSString *)annotationId
+{
+    NSLog(@"documentID => %@", annotationId);
+    if (!annotationId){
+        return;
+    }
+    PTDocumentController *myController = (PTDocumentController *)self.documentViewController;
+    // Initialize annotation view controller with a PTPDFViewCtrl instance.
+    PTAnnotationViewController *annotationViewController = [[PTAnnotationViewController alloc] initWithAnnotationManager: myController.toolManager.annotationManager];
+    PTAnnotationReplyViewController *annotationReplyViewController = [[PTAnnotationReplyViewController alloc] initWithAnnotationManager:myController.toolManager.annotationManager];
+    [annotationReplyViewController setCurrentAnnotationIdentifier:annotationId];
+    // Set the current view controller as the annotation view controller's delegate.
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:annotationReplyViewController];
+    if ( [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad ) {
+        navigationController.modalPresentationStyle = UIModalPresentationPopover;
+    }
+    [self.documentViewController presentViewController:navigationController animated:YES completion:nil];
+    
+}
+
 - (BOOL)commitTool
 {
     PTDocumentBaseViewController *viewController = nil;
