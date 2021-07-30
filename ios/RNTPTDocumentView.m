@@ -3001,6 +3001,12 @@ NS_ASSUME_NONNULL_END
         PTOpenMenuItemTitleKey: PTOpenMenuItemIdentifierKey,
         PTCalibrateMenuItemTitleKey: PTCalibrateMenuItemIdentifierKey,
     };
+    NSArray<NSString *> *whitelist = @[
+        PTLocalizedString(PTHighlightWhiteListKey, nil),
+        PTLocalizedString(PTStrikeoutWhiteListKey, nil),
+        PTLocalizedString(PTUnderlineWhiteListKey, nil),
+        PTLocalizedString(PTSquigglyWhiteListKey, nil),
+    ];
     // Get the localized title for each menu item.
     NSMutableDictionary<NSString *, NSString *> *localizedMap = [NSMutableDictionary dictionary];
     for (NSString *key in map) {
@@ -3019,7 +3025,10 @@ NS_ASSUME_NONNULL_END
         if (!self.annotationMenuItems) {
             [permittedItems addObject:menuItem];
         }
-        else {
+        else {if ([whitelist containsObject:menuItem.title] && [self.annotationMenuItems containsObject:PTTypeMenuItemIdentifierKey]) {
+            [permittedItems addObject:menuItem];
+        }
+        else
             if (menuItemId && [self.annotationMenuItems containsObject:menuItemId]) {
                 [permittedItems addObject:menuItem];
             }
