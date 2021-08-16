@@ -1,5 +1,4 @@
 export default {
-
   // Buttons define the various kinds of buttons for the viewer
   Buttons: {
     editToolButton: 'editToolButton',
@@ -79,7 +78,8 @@ export default {
     annotationCreatePolygon: 'AnnotationCreatePolygon',
     annotationCreatePolygonCloud: 'AnnotationCreatePolygonCloud',
     annotationCreateDistanceMeasurement: 'AnnotationCreateDistanceMeasurement',
-    annotationCreatePerimeterMeasurement: 'AnnotationCreatePerimeterMeasurement',
+    annotationCreatePerimeterMeasurement:
+      'AnnotationCreatePerimeterMeasurement',
     annotationCreateAreaMeasurement: 'AnnotationCreateAreaMeasurement',
     annotationCreateFileAttachment: 'AnnotationCreateFileAttachment',
     annotationCreateSound: 'AnnotationCreateSound',
@@ -147,7 +147,7 @@ export default {
   EraserType: {
     annotationEraser: 'annotationEraser',
     hybrideEraser: 'hybrideEraser',
-    inkEraser: 'inkEraser'
+    inkEraser: 'inkEraser',
   },
 
   // LongPressMenu defines the menu items when a long press on empty space or text occurs
@@ -158,7 +158,7 @@ export default {
     share: 'share',
     read: 'read',
   },
-  
+
   // Actions define potentially overridable action to the viewer
   Actions: {
     linkPress: 'linkPress',
@@ -167,94 +167,94 @@ export default {
 
   // AnnotationFlags define the flags for any annotation in the document
   AnnotationFlags: {
-    hidden: "hidden",
-    invisible: "invisible",
-    locked: "locked",
-    lockedContents: "lockedContents",
-    noRotate: "noRotate",
-    noView: "noView",
-    noZoom: "noZoom",
-    print: "print",
-    readOnly: "readOnly",
-    toggleNoView: "toggleNoView"
+    hidden: 'hidden',
+    invisible: 'invisible',
+    locked: 'locked',
+    lockedContents: 'lockedContents',
+    noRotate: 'noRotate',
+    noView: 'noView',
+    noZoom: 'noZoom',
+    print: 'print',
+    readOnly: 'readOnly',
+    toggleNoView: 'toggleNoView',
   },
 
   // DefaultToolbars define a set of pre-designed toolbars for easier customization
   DefaultToolbars: {
-    View: "PDFTron_View",
-    Annotate: "PDFTron_Annotate",
-    Draw: "PDFTron_Draw",
-    Insert: "PDFTron_Insert",
-    FillAndSign: "PDFTron_Fill_and_Sign",
-    PrepareForm: "PDFTron_Prepare_Form",
-    Measure: "PDFTron_Measure",
-    Pens: "PDFTron_Pens",
-    Redaction: "PDFTron_Redact",
-    Favorite: "PDFTron_Favorite"
+    View: 'PDFTron_View',
+    Annotate: 'PDFTron_Annotate',
+    Draw: 'PDFTron_Draw',
+    Insert: 'PDFTron_Insert',
+    FillAndSign: 'PDFTron_Fill_and_Sign',
+    PrepareForm: 'PDFTron_Prepare_Form',
+    Measure: 'PDFTron_Measure',
+    Pens: 'PDFTron_Pens',
+    Redaction: 'PDFTron_Redact',
+    Favorite: 'PDFTron_Favorite',
   },
 
   // ToolbarIcons define default toolbar icons for use for potential custom toolbars
   ToolbarIcons: {
-    View: "PDFTron_View",
-    Annotate: "PDFTron_Annotate",
-    Draw: "PDFTron_Draw",
-    Insert: "PDFTron_Insert",
-    FillAndSign: "PDFTron_Fill_and_Sign",
-    PrepareForm: "PDFTron_Prepare_Form",
-    Measure: "PDFTron_Measure",
-    Pens: "PDFTron_Pens",
-    Redaction: "PDFTron_Redact",
-    Favorite: "PDFTron_Favorite"
+    View: 'PDFTron_View',
+    Annotate: 'PDFTron_Annotate',
+    Draw: 'PDFTron_Draw',
+    Insert: 'PDFTron_Insert',
+    FillAndSign: 'PDFTron_Fill_and_Sign',
+    PrepareForm: 'PDFTron_Prepare_Form',
+    Measure: 'PDFTron_Measure',
+    Pens: 'PDFTron_Pens',
+    Redaction: 'PDFTron_Redact',
+    Favorite: 'PDFTron_Favorite',
   },
 
   // CustomToolbarKey defines the necessary keys for a custom toolbar
   CustomToolbarKey: {
-    Id: "id",
-    Name: "name",
-    Icon: "icon",
-    Items: "items"
+    Id: 'id',
+    Name: 'name',
+    Icon: 'icon',
+    Items: 'items',
   },
 
   // ThumbnailFilterMode defines filter modes in the thumbnails browser
   ThumbnailFilterMode: {
-    Annotated: "annotated",
-    Bookmarked: "bookmarked",
+    Annotated: 'annotated',
+    Bookmarked: 'bookmarked',
   },
 
   // Conversion defines conversion sources and destinations
   Conversion: {
-    Screen: "screen",
-    Canvas: "canvas",
-    Page: "page",
+    Screen: 'screen',
+    Canvas: 'canvas',
+    Page: 'page',
   },
-  
+
   // ViewModePickerItem defines view mode items in the view mode dialog
   ViewModePickerItem: {
-    Crop: "viewModeCrop",
-    Rotation: "viewModeRotation",
-    ColorMode: "viewModeColorMode",
+    Crop: 'viewModeCrop',
+    Rotation: 'viewModeRotation',
+    ColorMode: 'viewModeColorMode',
   },
 
   // ZoomLimitMode defines the limit mode for zoom in the current document viewer
   ZoomLimitMode: {
-    None: "none",
-    Absolute: "absolute",
-    Relative: "relative",
+    None: 'none',
+    Absolute: 'absolute',
+    Relative: 'relative',
   },
 
   // OverprintMode defines when overprint would be applied in the viewer
   OverprintMode: {
-    On: "on",
-    Off: "off",
-    OnlyPDFX: "pdfx", // only apply to PDF/X files
+    On: 'on',
+    Off: 'off',
+    OnlyPDFX: 'pdfx', // only apply to PDF/X files
   },
 
   // ColorPostProcessMode defines color modifications after rendering in the viewer
   ColorPostProcessMode: {
-    None: "none",
-    Invert: "invert",
-    GradientMap: "gradientMap",
-    NightMode: "nightMode"
+    None: 'none',
+    Invert: 'invert',
+    GradientMap: 'gradientMap',
+    NightMode: 'nightMode',
   },
 
   // ReflowOrientation defines the scrolling direction when in reflow viewing mode
@@ -265,8 +265,8 @@ export default {
 
   // Export to format
   ExportFormat: {
-    BMP: "BMP",
-    JPEG: "JPEG",
-    PNG: "PNG",
+    BMP: 'BMP',
+    JPEG: 'JPEG',
+    PNG: 'PNG',
   },
-};
+}

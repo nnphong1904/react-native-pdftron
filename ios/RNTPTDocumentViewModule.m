@@ -46,6 +46,20 @@ RCT_REMAP_METHOD(setToolMode,
     }
 }
 
+RCT_REMAP_METHOD(openCommentList,
+                 openCommentListForDocumentViewTag:(nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject){
+    @try {
+        [[self documentViewManager] openCommentListForDocumentViewTag:tag annotationId:annotationId];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"commit_tool", @"Failed to commit tool", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(commitTool,
                  commitToolForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -1325,6 +1339,34 @@ RCT_REMAP_METHOD(openNavigationLists,
     }
     @catch (NSException *exception) {
         reject(@"open_navigation_lists_failed", @"Failed to open navigation lists", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getSavedSignatures,
+                 getSavedSignaturesForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSArray *signatures = [[self documentViewManager] getSavedSignaturesForDocumentViewTag:tag];
+        resolve(signatures);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_saved_signatures_failed", @"Failed to get saved signatures", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getSavedSignatureFolder,
+                 getSavedSignatureFolderForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *folder = [[self documentViewManager] getSavedSignatureFolderForDocumentViewTag:tag];
+        resolve(folder);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_saved_signature_folder_failed", @"Failed to get saved signatures folder", [self errorFromException:exception]);
     }
 }
 

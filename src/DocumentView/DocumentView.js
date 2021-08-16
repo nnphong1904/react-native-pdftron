@@ -21,6 +21,7 @@ export default class DocumentView extends PureComponent {
     leadingNavButtonIcon: PropTypes.string,
     showLeadingNavButton: PropTypes.bool,
     onLeadingNavButtonPressed: PropTypes.func,
+    onCommentHistoryPressed: PropTypes.func,
     onDocumentLoaded: PropTypes.func,
     onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
@@ -105,6 +106,7 @@ export default class DocumentView extends PureComponent {
     defaultEraserType: PropTypes.string,
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
+    onPageMoved: PropTypes.func,
     disableEditingByAnnotationType: PropTypes.array,
     hideScrollbars: PropTypes.bool,
     saveStateEnabled: PropTypes.bool,
@@ -115,7 +117,12 @@ export default class DocumentView extends PureComponent {
   };
 
   onChange = (event) => {
-    if (event.nativeEvent.onLeadingNavButtonPressed) {
+    if (event.nativeEvent.onCommentHistoryPressed){
+      if (this.props.onLeadingNavButtonPressed) {
+        this.props.onCommentHistoryPressed();
+      }
+    }
+    else if (event.nativeEvent.onLeadingNavButtonPressed) {
       if (this.props.onLeadingNavButtonPressed) {
         this.props.onLeadingNavButtonPressed();
       }
@@ -230,7 +237,7 @@ export default class DocumentView extends PureComponent {
       }
     } else if (event.nativeEvent.onTextSearchStart) {
       if (this.props.onTextSearchStart) {
-        this.props.onTextSearchStart(event.nativeEvent.onTextSearchStart);
+        this.props.onTextSearchStart();
       }
     } else if (event.nativeEvent.onTextSearchResult) {
       if (this.props.onTextSearchResult) {
@@ -242,6 +249,13 @@ export default class DocumentView extends PureComponent {
     } else if (event.nativeEvent.onUndoRedoStateChanged) {
       if (this.props.onUndoRedoStateChanged) {
         this.props.onUndoRedoStateChanged();
+      }
+    } else if (event.nativeEvent.onPageMoved) {
+      if (this.props.onPageMoved) {
+        this.props.onPageMoved({
+          'previousPageNumber': event.nativeEvent.previousPageNumber,
+          'pageNumber': event.nativeEvent.pageNumber,
+        });
       }
     }
   }
@@ -759,6 +773,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  openSearch = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openSearch(tag);
+    }
+    return Promise.resolve();
+  }
+
   getSelection = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -820,15 +842,6 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.selectAll(tag);
-    }
-    return Promise.resolve();
-  }
-
-
-  setUrlExtraction = (urlExtraction) => {
-    const tag = findNodeHandle(this._viewerRef);
-    if (tag != null) {
-       return DocumentViewManager.setUrlExtraction(tag, urlExtraction);
     }
     return Promise.resolve();
   }
@@ -929,6 +942,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  showRotateDialog = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.showRotateDialog(tag);
+    }
+    return Promise.resolve();
+  }
+
   showAddPagesView = (rect) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -989,6 +1010,22 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.openNavigationLists(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getSavedSignatures = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatures(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getSavedSignatureFolder = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatureFolder(tag);
     }
     return Promise.resolve();
   }

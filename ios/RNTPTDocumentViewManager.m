@@ -539,8 +539,19 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
 
 #pragma mark - Events
 
+- (void)commentHistoryPressed: (RNTPTDocumentView *) sender
+{
+    NSLog(@"HELLO FROM MANAGER");
+    if (sender.onChange){
+        sender.onChange(@{
+            @"onCommentHistoryPressed": @YES,
+        });
+    }
+}
+
 - (void)navButtonClicked: (RNTPTDocumentView *) sender
 {
+    NSLog(@"HELLO FROM MANAGER NAV");
     if (sender.onChange) {
         sender.onChange(@{
             @"onLeadingNavButtonPressed": @YES,
@@ -768,6 +779,16 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         [documentView setToolMode:toolMode];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+-(void)openCommentListForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView openCommentList:annotationId];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
@@ -1388,6 +1409,28 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         [documentView openThumbnailsView];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (NSArray *)getSavedSignaturesForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSArray * signatures = [documentView getSavedSignatures];
+        return signatures;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (NSString *)getSavedSignatureFolderForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSString * folder = [documentView getSavedSignatureFolder];
+        return folder;
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }

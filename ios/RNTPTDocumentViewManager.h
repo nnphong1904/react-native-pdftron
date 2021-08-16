@@ -15,6 +15,8 @@
 
 - (void)setToolModeForDocumentViewTag:(NSNumber *)tag toolMode:(NSString *)toolMode;
 
+- (void)openCommentListForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId;
+
 - (BOOL)commitToolForDocumentViewTag:(NSNumber *)tag;
 
 - (NSString *)getDocumentPathForDocumentViewTag:(NSNumber *)tag;
@@ -185,5 +187,9 @@
 - (void)shareCopyForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect withFlattening:(BOOL)flattening;
 
 - (void)openThumbnailsViewForDocumentViewTag:(NSNumber *)tag;
+
+- (NSArray *)getSavedSignaturesForDocumentViewTag:(NSNumber *)tag;
+
+- (NSString *)getSavedSignatureFolderForDocumentViewTag:(NSNumber *)tag;
 
 @end

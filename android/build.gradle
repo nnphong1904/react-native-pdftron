@@ -46,7 +46,7 @@ repositories {
     maven {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         // Matches the RN Hello World template
-        // https://github.com/facebook/react-native/blob/1e8f3b11027fe0a7514b4fc97d0798d3c64bc895/local-cli/templates/HelloWorld/android/build.gradle#L21
+        // https://github.com/facebook/react-native/blob/1e8f3b11027fe0a7514b4fc97d1098d3c64bc895/local-cli/templates/HelloWorld/android/build.gradle#L21
         url "$projectDir/../node_modules/react-native/android"
     }
     mavenCentral()
@@ -54,8 +54,7 @@ repositories {
 
 dependencies {
     implementation "com.facebook.react:react-native:+"
-
-    implementation "com.pdftron:pdftron:9.0.3-beta06"
-    implementation "com.pdftron:tools:9.0.3-beta06"
-    implementation "com.pdftron:collab:9.0.3-beta06"
+    implementation "com.pdftron:pdftron:9.0.3-beta11"
+    implementation "com.pdftron:tools:9.0.3-beta11"
+    implementation "com.pdftron:collab:9.0.3-beta11"
 }
