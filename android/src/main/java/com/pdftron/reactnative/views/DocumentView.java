@@ -1913,6 +1913,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return !mFragmentTransactionFinished;
     }
 
+    @Override
+    public void onStartSearchMode() {
+        super.onStartSearchMode();
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                requestLayout();
+            }
+        }, 100);
+    }
+
     private boolean hasAnnotationsSelected() {
         return mSelectedAnnots != null && !mSelectedAnnots.isEmpty();
     }
