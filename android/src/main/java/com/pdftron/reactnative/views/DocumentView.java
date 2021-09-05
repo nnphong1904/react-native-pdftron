@@ -228,6 +228,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         
         mBuilder = new ViewerConfig.Builder();
         mBuilder
+				.showAnnotationsList(false)
                 .fullscreenModeEnabled(false)
                 .multiTabEnabled(false)
                 .maximumTabCount(Integer.MAX_VALUE)
