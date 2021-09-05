@@ -228,6 +228,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         
         mBuilder = new ViewerConfig.Builder();
         mBuilder
+				.showAnnotationsList(false)
                 .fullscreenModeEnabled(false)
                 .multiTabEnabled(false)
                 .maximumTabCount(Integer.MAX_VALUE)
@@ -1911,6 +1912,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     @Override
     public boolean canRecreateActivity() {
         return !mFragmentTransactionFinished;
+    }
+
+    @Override
+    public void onStartSearchMode() {
+        super.onStartSearchMode();
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                requestLayout();
+            }
+        }, 100);
     }
 
     private boolean hasAnnotationsSelected() {
