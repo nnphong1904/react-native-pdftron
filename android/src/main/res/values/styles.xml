@@ -11,6 +11,15 @@
         <item name="custom_bookmarks_tab_layout">@style/BookmarksTabLayoutStyle</item>
         <item name="sticky_note_presets">@array/custom_presets</item>
     </style>
+    <style name="PDFTronAppTheme" parent="PDFTronAppThemeBase">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorAccent">@color/color_secondary</item>
+        <item name="android:textViewStyle">@style/defaultTextViewStyle</item>
+        <item name="windowActionModeOverlay">true</item>
+	</style>
+    <style name="defaultTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/axiforma_medium</item>
+    </style>
     <style name="CustomPresetStyle1">
         <item name="annot_color">@color/yellow</item>
         <item name="annot_icon">Comment</item>
@@ -32,17 +41,13 @@
         <item name="titleTextColor">@color/neutral_60</item>
         <item name="colorControlNormal">@color/neutral_60</item>
         <item name="iconTint">@color/neutral_60</item>
+        <item name="android:fontFamily">@font/axiforma_medium</item>
         <!--Search-->
         <item name="android:editTextColor">@color/neutral_60</item>
         <item name="android:textColorHint">@color/neutral_60</item>
     </style>
     <style name="ActionModeOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:tint">@color/neutral_60</item>
-    </style>
-    <style name="PDFTronAppTheme" parent="CustomPDFTronAppTheme">
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorAccent">@color/color_secondary</item>
-        <item name="android:colorBackground">@color/white</item>
     </style>
     <style name="AnnotationToolbarTheme" parent="PTAnnotationToolbarTheme">
         <item name="colorBackground">@color/white</item>
