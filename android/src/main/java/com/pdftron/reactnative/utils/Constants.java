@@ -3,6 +3,7 @@ package com.pdftron.reactnative.utils;
 public final class Constants {
     // EVENTS
     public static final String ON_NAV_BUTTON_PRESSED = "onLeadingNavButtonPressed";
+    public static final String ON_COMMENT_HISTORY_PRESSED = "onCommentHistoryPressed";
     public static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     public static final String ON_PAGE_CHANGED = "onPageChanged";
     public static final String ON_SCROLL_CHANGED = "onScrollChanged";

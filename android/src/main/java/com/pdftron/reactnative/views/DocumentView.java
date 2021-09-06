@@ -1,4 +1,5 @@
 package com.pdftron.reactnative.views;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.pdftron.pdf.model.AnnotStyleProperty;
@@ -258,6 +259,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (menuItem.getItemId() == R.id.action_search_button) {
             openSearch();
         }
+        if (menuItem.getItemId() == R.id.action_commentsList){
+        		onCommentHistoryPressed();
+				}
         return false;
     }
     @Override
@@ -356,6 +360,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 customBottomBar.addCustomButton(R.string.action_thumbnails, R.drawable.ic_edit_viewer_thumbnail, R.id.action_thumbnails);
             }
         }
+
+        // below is the button we want to attach the function
+        customBottomBar.addCustomButton(R.string.action_commentsList, R.drawable.ic_comment_circle_text, R.id.action_commentsList);
 
         mBuilder.bottomBarBuilder(customBottomBar);
     }
@@ -1898,6 +1905,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void onNavButtonPressed() {
         onReceiveNativeEvent(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
     }
+
+		public void onCommentHistoryPressed() {
+    	onReceiveNativeEvent(ON_COMMENT_HISTORY_PRESSED, ON_COMMENT_HISTORY_PRESSED);
+		}
+
 
     @Override
     public boolean canShowFileInFolder() {
