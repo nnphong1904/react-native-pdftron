@@ -5,5 +5,4 @@
     <string name="action_reflow_mode">Reading mode</string>
     <string name="action_search">Search</string>
 		<string name="action_commentsList">Comments List</string>
-	  <item name="action_commentsList" type="id"/>
 </resources>
