@@ -39,7 +39,7 @@
         <item name="colorControlNormal">@color/neutral_60</item>
         <item name="iconTint">@color/neutral_60</item>
         <item name="android:fontFamily">@font/axiforma_medium</item>
-        <!--Search-->
+        <!--Search config-->
         <item name="android:editTextColor">@color/neutral_60</item>
         <item name="android:textColorHint">@color/neutral_60</item>
     </style>
