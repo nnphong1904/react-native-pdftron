@@ -261,7 +261,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         if (menuItem.getItemId() == R.id.action_commentsList){
         		onCommentHistoryPressed();
-				}
+		}
         return false;
     }
     @Override
@@ -272,7 +272,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (!Utils.isNullOrEmpty(mTabTitle)) {
                 mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
             }
-            mViewerBuilder = mViewerBuilder.usingTheme(R.style.CustomPDFTronAppTheme);
+            mViewerBuilder = mViewerBuilder.usingTheme(R.style.PDFTronAppTheme);
         }
     }
 
@@ -352,17 +352,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void bottomToolbar(ReadableArray bottomToolbarItems) {
         BottomBarBuilder customBottomBar = BottomBarBuilder.withTag("CustomBottomBar");
 
+        // below is the button we want to attach the function
         for (int i = 0; i < bottomToolbarItems.size(); i++) {
             String item = bottomToolbarItems.getString(i);
             if (BUTTON_OUTLINE_LIST.equals(item)) {
                 customBottomBar.addCustomButton(R.string.action_outline, R.drawable.ic_edit_viewer_layout, R.id.action_outline);
+            } else if (BUTTON_COMMENT_HISTORY.equals(item)) {
+                customBottomBar.addCustomButton(R.string.action_commentsList, R.drawable.ic_comment_circle_text, R.id.action_commentsList);
             } else if (BUTTON_THUMBNAILS.equals(item)) {
                 customBottomBar.addCustomButton(R.string.action_thumbnails, R.drawable.ic_edit_viewer_thumbnail, R.id.action_thumbnails);
             }
         }
-
-        // below is the button we want to attach the function
-        customBottomBar.addCustomButton(R.string.action_commentsList, R.drawable.ic_comment_circle_text, R.id.action_commentsList);
 
         mBuilder.bottomBarBuilder(customBottomBar);
     }
@@ -1906,9 +1906,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         onReceiveNativeEvent(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
     }
 
-		public void onCommentHistoryPressed() {
-    	onReceiveNativeEvent(ON_COMMENT_HISTORY_PRESSED, ON_COMMENT_HISTORY_PRESSED);
-		}
+    public void onCommentHistoryPressed() {
+        onReceiveNativeEvent(ON_COMMENT_HISTORY_PRESSED, ON_COMMENT_HISTORY_PRESSED);
+    }
 
 
     @Override
