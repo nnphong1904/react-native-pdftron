@@ -1954,6 +1954,9 @@ NS_ASSUME_NONNULL_END
     // Leading Nav Icon.
     [self applyLeadingNavButton];
     
+    // Comment list button
+    [self applyCommentHistoryButton];
+    
     // Thumbnail Filter Mode
     
     NSMutableArray <PTFilterMode>* filterModeArray = [[NSMutableArray alloc] init];
