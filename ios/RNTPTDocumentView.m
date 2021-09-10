@@ -337,7 +337,7 @@ NS_ASSUME_NONNULL_END
     PTDocumentController *myController = (PTDocumentController *)self.documentViewController;
     myController.toolGroupIndicatorView.button.titleLabel.font = [UIFont systemFontOfSize:20.0f weight:UIFontWeightBold];
     myController.toolGroupToolbar.backgroundColor = UIColor.whiteColor;
-    
+    myController.toolGroupToolbar.shadowHidden = YES;
 //    myController.toolGroupManager.selectedGroup = myController.toolGroupManager.viewItemGroup;
     
     PTToolGroupManager *toolGroupManager = myController.toolGroupManager;
