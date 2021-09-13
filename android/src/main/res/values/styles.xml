@@ -16,7 +16,10 @@
         <item name="pt_toolbar_theme">@style/ToolbarTheme</item>
         <item name="custom_bookmarks_tab_layout">@style/BookmarksTabLayoutStyle</item>
         <item name="sticky_note_presets">@array/custom_presets</item>
+        <item name="actionMenuTextColor">@color/neutral_60</item>
+        <item name="pt_toolbar_popup_theme">@style/ToolbarPopupTheme</item>
     </style>
+    <style name="ToolbarPopupTheme" parent="ThemeOverlay.AppCompat.Light" />
     <style name="CustomPresetStyle1">
         <item name="annot_color">@color/yellow</item>
         <item name="annot_icon">Comment</item>

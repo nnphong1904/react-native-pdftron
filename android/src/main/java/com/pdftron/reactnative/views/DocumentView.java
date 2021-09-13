@@ -1,10 +1,5 @@
 package com.pdftron.reactnative.views;
-import android.util.Log;
 import android.view.MenuItem;
-
-import com.pdftron.pdf.model.AnnotStyleProperty;
-import com.pdftron.reactnative.nativeviews.RNCollabViewerCtrlTabHostFragment;
-import com.pdftron.pdf.config.ViewerBuilder2;
 
 import com.pdftron.pdf.model.AnnotStyleProperty;
 import com.pdftron.reactnative.nativeviews.RNCollabViewerCtrlTabHostFragment;
@@ -224,7 +219,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         mToolManagerBuilder = ToolManagerBuilder.from()
                 .addAnnotStyleProperty(new AnnotStyleProperty(Annot.e_Text).setCanShowPreset(false))
-                .setShowRichContentOption(false)
+                .setFreeTextFontsFromAssets(new String[] 
+                    {
+                        "file:///android_asset/fonts/Aladin/Aladin-Regular.ttf",
+                        "file:///android_asset/fonts/Allura/Allura-Regular.ttf",
+                        "file:///android_asset/fonts/Cookie/Cookie-Regular.ttf",
+                        "file:///android_asset/fonts/Courgette/Courgette-Regular.ttf",
+                        "file:///android_asset/fonts/DancingScript/DancingScript-Regular.ttf",
+                        "file:///android_asset/fonts/GillSans/GillSans-Regular.ttf",
+                        "file:///android_asset/fonts/Helvetica/Helvetica-Regular.ttf",
+                        "file:///android_asset/fonts/Italianno/Italianno-Regular.ttf",
+                        "file:///android_asset/fonts/Lora/Lora-Regular.ttf",
+                        "file:///android_asset/fonts/Merriweather/Merriweather-Regular.ttf",
+                        "file:///android_asset/fonts/Roboto/Roboto-Regular.ttf",
+                    }
+                )
+                .setShowRichContentOption(true)
                 .setOpenToolbar(true);
         
         mBuilder = new ViewerConfig.Builder();
