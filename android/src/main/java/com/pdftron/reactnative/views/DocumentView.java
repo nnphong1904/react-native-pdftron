@@ -1,10 +1,5 @@
 package com.pdftron.reactnative.views;
-import android.util.Log;
 import android.view.MenuItem;
-
-import com.pdftron.pdf.model.AnnotStyleProperty;
-import com.pdftron.reactnative.nativeviews.RNCollabViewerCtrlTabHostFragment;
-import com.pdftron.pdf.config.ViewerBuilder2;
 
 import com.pdftron.pdf.model.AnnotStyleProperty;
 import com.pdftron.reactnative.nativeviews.RNCollabViewerCtrlTabHostFragment;
@@ -224,8 +219,23 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         mToolManagerBuilder = ToolManagerBuilder.from()
                 .addAnnotStyleProperty(new AnnotStyleProperty(Annot.e_Text).setCanShowPreset(false))
-                .setShowRichContentOption(false)
-                .setOpenToolbar(true);
+                .setFreeTextFontsFromAssets(new String[] 
+                    {
+                        "file:///android_asset/fonts/Aladin/Aladin-Regular.ttf",
+                        "file:///android_asset/fonts/Allura/Allura-Regular.ttf",
+                        "file:///android_asset/fonts/Cookie/Cookie-Regular.ttf",
+                        "file:///android_asset/fonts/Courgette/Courgette-Regular.ttf",
+                        "file:///android_asset/fonts/DancingScript/DancingScript-Regular.ttf",
+                        "file:///android_asset/fonts/GillSans/GillSans-Regular.ttf",
+                        "file:///android_asset/fonts/Helvetica/Helvetica-Regular.ttf",
+                        "file:///android_asset/fonts/Italianno/Italianno-Regular.ttf",
+                        "file:///android_asset/fonts/Lora/Lora-Regular.ttf",
+                        "file:///android_asset/fonts/Merriweather/Merriweather-Regular.ttf",
+                        "file:///android_asset/fonts/Roboto/Roboto-Regular.ttf",
+                    }
+                )
+                .setShowRichContentOption(true)
+                .setOpenToolbar(false);
         
         mBuilder = new ViewerConfig.Builder();
         mBuilder
@@ -261,7 +271,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         if (menuItem.getItemId() == R.id.action_commentsList){
         		onCommentHistoryPressed();
-				}
+		}
         return false;
     }
     @Override
@@ -352,17 +362,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void bottomToolbar(ReadableArray bottomToolbarItems) {
         BottomBarBuilder customBottomBar = BottomBarBuilder.withTag("CustomBottomBar");
 
+        // below is the button we want to attach the function
         for (int i = 0; i < bottomToolbarItems.size(); i++) {
             String item = bottomToolbarItems.getString(i);
             if (BUTTON_OUTLINE_LIST.equals(item)) {
                 customBottomBar.addCustomButton(R.string.action_outline, R.drawable.ic_edit_viewer_layout, R.id.action_outline);
+            } else if (BUTTON_COMMENT_HISTORY.equals(item)) {
+                customBottomBar.addCustomButton(R.string.action_commentsList, R.drawable.ic_comment_circle_text, R.id.action_commentsList);
             } else if (BUTTON_THUMBNAILS.equals(item)) {
                 customBottomBar.addCustomButton(R.string.action_thumbnails, R.drawable.ic_edit_viewer_thumbnail, R.id.action_thumbnails);
             }
         }
-
-        // below is the button we want to attach the function
-        customBottomBar.addCustomButton(R.string.action_commentsList, R.drawable.ic_comment_circle_text, R.id.action_commentsList);
 
         mBuilder.bottomBarBuilder(customBottomBar);
     }
@@ -1906,9 +1916,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         onReceiveNativeEvent(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
     }
 
-		public void onCommentHistoryPressed() {
-    	onReceiveNativeEvent(ON_COMMENT_HISTORY_PRESSED, ON_COMMENT_HISTORY_PRESSED);
-		}
+    public void onCommentHistoryPressed() {
+        onReceiveNativeEvent(ON_COMMENT_HISTORY_PRESSED, ON_COMMENT_HISTORY_PRESSED);
+    }
 
 
     @Override

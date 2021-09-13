@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="CustomPDFTronAppTheme" parent="PDFTronThemeBase">
+    <style name="CustomPDFTronAppTheme" parent="PDFTronAppTheme">
         <item name="pt_bottom_bar_style">@style/BottomBarTheme</item>
-        <item name="toolbarNavigationButtonStyle">@style/ToolbarButtonNavigationStyle</item>
         <item name="pt_toolbar_switcher_button_style">@style/ToolbarSwitcherButtonTheme</item>
         <item name="pt_toolbar_style">@style/ToolbarStyle</item>
         <item name="pt_annotation_toolbar_style">@style/AnnotationToolbarTheme</item>
-        <item name="actionOverflowButtonStyle">@style/ActionModeOverflowButtonStyle</item>
         <item name="pt_toolbar_theme">@style/ToolbarTheme</item>
+        <item name="pt_toolbar_popup_theme">@style/ToolbarPopupTheme</item>
+        <item name="toolbarNavigationButtonStyle">@style/ToolbarButtonNavigationStyle</item>
+        <item name="actionOverflowButtonStyle">@style/ActionModeOverflowButtonStyle</item>
+        <item name="actionMenuTextColor">@color/neutral_60</item>
         <item name="custom_bookmarks_tab_layout">@style/BookmarksTabLayoutStyle</item>
         <item name="sticky_note_presets">@array/custom_presets</item>
     </style>
-    <style name="PDFTronAppTheme" parent="CustomPDFTronAppTheme">
+     <style name="PDFTronAppTheme" parent="PDFTronAppThemeBase">
         <item name="colorPrimary">@color/white</item>
         <item name="colorAccent">@color/color_secondary</item>
         <item name="android:fontFamily">@font/axiforma_medium</item>
         <item name="windowActionModeOverlay">true</item>
-	</style>
+    </style>
+    <style name="ToolbarPopupTheme" parent="ThemeOverlay.AppCompat.Light" />
     <style name="CustomPresetStyle1">
         <item name="annot_color">@color/yellow</item>
         <item name="annot_icon">Comment</item>
@@ -38,8 +41,7 @@
         <item name="titleTextColor">@color/neutral_60</item>
         <item name="colorControlNormal">@color/neutral_60</item>
         <item name="iconTint">@color/neutral_60</item>
-        <item name="android:fontFamily">@font/axiforma_medium</item>
-        <!--Search config-->
+        <!--Search box config-->
         <item name="android:editTextColor">@color/neutral_60</item>
         <item name="android:textColorHint">@color/neutral_60</item>
     </style>

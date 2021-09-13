@@ -26,6 +26,7 @@ public final class Constants {
     public static final String ON_PAGE_MOVED = "onPageMoved";
 
     // BUTTONS
+    public static final String BUTTON_COMMENT_HISTORY = "commentHistoryButton";
     public static final String BUTTON_TOOLS = "toolsButton";
     public static final String BUTTON_SEARCH = "searchButton";
     public static final String BUTTON_SHARE = "shareButton";
