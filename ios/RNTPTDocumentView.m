@@ -7,6 +7,8 @@
 
 #include <objc/runtime.h>
 
+
+
 static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 {
     const IMP implementation = imp_implementationWithBlock(block);
@@ -21,6 +23,25 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 }
 
 NS_ASSUME_NONNULL_BEGIN
+@interface AnnotationsModeController : PTToolGroupViewController
+
+@end
+
+@implementation AnnotationsModeController
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    UIFont *defaultFont = [UIFont fontWithName:@"Axiforma-Regular" size:18.0];
+//    [defaultFont fontWithSize:25];
+    UIColor *defaultColor = [UIColor colorWithRed:97/255.0f green:130/255.0f blue:152/255.0f alpha:1.0f];
+    
+    cell.textLabel.textColor = defaultColor;
+    cell.textLabel.font = defaultFont;
+    
+    return cell;
+}
+
+@end
 
 @interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate>
 
@@ -133,6 +154,7 @@ NS_ASSUME_NONNULL_END
         [self unloadViewController];
     }
 }
+
 
 #pragma mark - Document Opening
 
@@ -260,6 +282,8 @@ NS_ASSUME_NONNULL_END
     navigationController.delegate = self;
         
     UIView *controllerView = navigationController.view;
+    
+    [PTOverrides overrideClass:[PTToolGroupViewController class] withClass:[AnnotationsModeController class]];
     
     // View controller containment.
     [parentController addChildViewController:navigationController];
