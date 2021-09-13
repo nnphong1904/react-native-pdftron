@@ -235,7 +235,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     }
                 )
                 .setShowRichContentOption(true)
-                .setOpenToolbar(true);
+                .setOpenToolbar(false);
         
         mBuilder = new ViewerConfig.Builder();
         mBuilder
@@ -282,7 +282,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (!Utils.isNullOrEmpty(mTabTitle)) {
                 mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
             }
-            mViewerBuilder = mViewerBuilder.usingTheme(R.style.PDFTronAppTheme);
+            mViewerBuilder = mViewerBuilder.usingTheme(R.style.CustomPDFTronAppTheme);
         }
     }
 
