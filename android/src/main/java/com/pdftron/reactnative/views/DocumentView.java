@@ -270,8 +270,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             openSearch();
         }
         if (menuItem.getItemId() == R.id.action_commentsList){
-        		onCommentHistoryPressed();
+        	onCommentHistoryPressed();
 		}
+        if (menuItem.getItemId() == R.id.action_notesList){
+            onNotesHistoryPressed();
+        }
         return false;
     }
     @Override
@@ -367,13 +370,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             String item = bottomToolbarItems.getString(i);
             if (BUTTON_OUTLINE_LIST.equals(item)) {
                 customBottomBar.addCustomButton(R.string.action_outline, R.drawable.ic_edit_viewer_layout, R.id.action_outline);
-            } else if (BUTTON_COMMENT_HISTORY.equals(item)) {
-                customBottomBar.addCustomButton(R.string.action_commentsList, R.drawable.ic_comment_circle_text, R.id.action_commentsList);
             } else if (BUTTON_THUMBNAILS.equals(item)) {
                 customBottomBar.addCustomButton(R.string.action_thumbnails, R.drawable.ic_edit_viewer_thumbnail, R.id.action_thumbnails);
-            }
+			}
         }
-
+			  customBottomBar.addCustomButton(R.string.action_commentsList, R.drawable.ic_comment_circle_text, R.id.action_commentsList);
+			  customBottomBar.addCustomButton(R.string.action_notesList, R.drawable.ic_basic_notes, R.id.action_notesList);
         mBuilder.bottomBarBuilder(customBottomBar);
     }
 
@@ -1918,6 +1920,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void onCommentHistoryPressed() {
         onReceiveNativeEvent(ON_COMMENT_HISTORY_PRESSED, ON_COMMENT_HISTORY_PRESSED);
+    }
+
+    public void onNotesHistoryPressed() { 
+        onReceiveNativeEvent(ON_NOTES_HISTORY_PRESSED, ON_NOTES_HISTORY_PRESSED);
     }
 
 

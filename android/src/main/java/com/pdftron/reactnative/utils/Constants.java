@@ -4,6 +4,7 @@ public final class Constants {
     // EVENTS
     public static final String ON_NAV_BUTTON_PRESSED = "onLeadingNavButtonPressed";
     public static final String ON_COMMENT_HISTORY_PRESSED = "onCommentHistoryPressed";
+    public static final String ON_NOTES_HISTORY_PRESSED = "onNotesHistoryPressed";
     public static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     public static final String ON_PAGE_CHANGED = "onPageChanged";
     public static final String ON_SCROLL_CHANGED = "onScrollChanged";
@@ -27,6 +28,7 @@ public final class Constants {
 
     // BUTTONS
     public static final String BUTTON_COMMENT_HISTORY = "commentHistoryButton";
+    public static final String BUTTON_NOTE_HISTORY = "noteHistoryButton";
     public static final String BUTTON_TOOLS = "toolsButton";
     public static final String BUTTON_SEARCH = "searchButton";
     public static final String BUTTON_SHARE = "shareButton";

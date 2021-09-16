@@ -283,6 +283,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)documentViewDetachedFromWindow:(RNTPTDocumentView *)documentView;
 
 - (void)commentHistoryPressed:(RNTPTDocumentView *)sender;
+- (void)notesHistoryPressed:(RNTPTDocumentView *)sender;
 - (void)navButtonClicked:(RNTPTDocumentView *)sender;
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
 - (void)documentError:(RNTPTDocumentView *)sender error:(nullable NSString *)error;

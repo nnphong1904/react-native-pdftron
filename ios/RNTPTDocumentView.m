@@ -2027,10 +2027,10 @@ NS_ASSUME_NONNULL_END
 
 - (void)applyCommentHistoryButton
 {
-    NSLog(@"HELLO FROM APPLY");
     UIBarButtonItem* commentHistory = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"comment-history"] style:UIBarButtonItemStylePlain target:self action:@selector(commentHistoryPressed)];
+    UIBarButtonItem* notesHistory = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"basic-notes"] style:UIBarButtonItemStylePlain target:self action:@selector(notesHistoryPressed)];
     NSMutableArray* bottomItems = [self.documentViewController.toolbarItems mutableCopy];
-
+    [bottomItems addObject:notesHistory];
     [bottomItems addObject:commentHistory];
     
     self.documentViewController.toolbarItems = [bottomItems copy];
@@ -2657,12 +2657,16 @@ NS_ASSUME_NONNULL_END
 
 - (void)commentHistoryPressed
 {
-    NSLog(@"HELLO COMMENT PRESSED");
     if([self.delegate respondsToSelector:@selector(commentHistoryPressed:)]){
-        NSLog(@"CORRECT CONDITION");
         [self.delegate commentHistoryPressed:self];
     }
-    NSLog(@"WRONG CONDITION");
+}
+
+- (void)notesHistoryPressed
+{
+    if([self.delegate respondsToSelector:@selector(notesHistoryPressed:)]){
+        [self.delegate notesHistoryPressed:self];
+    }
 }
 
 #pragma mark - Controls

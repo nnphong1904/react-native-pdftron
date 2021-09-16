@@ -541,10 +541,18 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
 
 - (void)commentHistoryPressed: (RNTPTDocumentView *) sender
 {
-    NSLog(@"HELLO FROM MANAGER");
     if (sender.onChange){
         sender.onChange(@{
             @"onCommentHistoryPressed": @YES,
+        });
+    }
+}
+
+- (void)notesHistoryPressed: (RNTPTDocumentView *) sender
+{
+    if (sender.onChange){
+        sender.onChange(@{
+            @"onNotesHistoryPressed": @YES,
         });
     }
 }

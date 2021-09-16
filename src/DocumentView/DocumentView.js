@@ -22,6 +22,7 @@ export default class DocumentView extends PureComponent {
     showLeadingNavButton: PropTypes.bool,
     onLeadingNavButtonPressed: PropTypes.func,
     onCommentHistoryPressed: PropTypes.func,
+    onNotesHistoryPressed: PropTypes.func,
     onDocumentLoaded: PropTypes.func,
     onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
@@ -118,11 +119,14 @@ export default class DocumentView extends PureComponent {
 
   onChange = (event) => {
     if (event.nativeEvent.onCommentHistoryPressed){
-      if (this.props.onLeadingNavButtonPressed) {
+      if (this.props.onCommentHistoryPressed) {
         this.props.onCommentHistoryPressed();
       }
-    }
-    else if (event.nativeEvent.onLeadingNavButtonPressed) {
+    } else if (event.nativeEvent.onNotesHistoryPressed){
+      if (this.props.onNotesHistoryPressed) {
+        this.props.onNotesHistoryPressed();
+      }
+    } else if (event.nativeEvent.onLeadingNavButtonPressed) {
       if (this.props.onLeadingNavButtonPressed) {
         this.props.onLeadingNavButtonPressed();
       }
