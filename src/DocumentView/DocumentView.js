@@ -73,6 +73,7 @@ export default class DocumentView extends PureComponent {
     multiTabEnabled: PropTypes.bool,
     tabTitle: PropTypes.string,
     maxTabCount: PropTypes.number,
+    onTabChanged: PropTypes.func,
     signSignatureFieldsWithStamps: PropTypes.bool,
     annotationPermissionCheckEnabled: PropTypes.bool,
     annotationToolbars: PropTypes.array,
@@ -259,6 +260,12 @@ export default class DocumentView extends PureComponent {
         this.props.onPageMoved({
           'previousPageNumber': event.nativeEvent.previousPageNumber,
           'pageNumber': event.nativeEvent.pageNumber,
+        });
+      }
+    } else if (event.nativeEvent.onTabChanged) {
+      if (this.props.onTabChanged) {
+        this.props.onTabChanged({
+          'currentTab' : event.nativeEvent.currentTab
         });
       }
     }
@@ -1030,6 +1037,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.getSavedSignatureFolder(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getSavedSignatureJpgFolder = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatureJpgFolder(tag);
     }
     return Promise.resolve();
   }

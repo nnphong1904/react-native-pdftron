@@ -126,8 +126,6 @@
 
 - (void)setOverprintforDocumentViewTag:(NSNumber *)tag overprint:(NSString *)overprint;
 
-- (void)setUrlExtractionForDocumentViewTag:(NSNumber *)tag urlExtraction:(BOOL)urlExtraction;
-
 - (void)setPageBorderVisibilityForDocumentViewTag:(NSNumber *)tag pageBorderVisibility:(BOOL)pageBorderVisibility;
 
 - (void)setPageTransparencyGridForDocumentViewTag:(NSNumber *)tag pageTransparencyGrid:(BOOL)pageTransparencyGrid;
@@ -143,6 +141,8 @@
 - (void)findTextForDocumentViewTag:(NSNumber *)tag searchString:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp;
 
 - (void)cancelFindTextForDocumentViewTag:(NSNumber *)tag;
+
+- (void)openSearchForDocumentViewTag:(NSNumber *)tag;
 
 - (void)startSearchModeForDocumentViewTag:(NSNumber *)tag searchString:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
 

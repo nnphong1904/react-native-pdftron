@@ -186,6 +186,8 @@ static NSString * const PTAbsoluteZoomLimitModeKey = @"absolute";
 static NSString * const PTRelativeZoomLimitModeKey = @"relative";
 
 static NSString * const PTRectKey = @"rect";
+static NSString * const PTScreenRectKey = @"screenRect";
+static NSString * const PTPageRectKey = @"pageRect";
 static NSString * const PTRectX1Key = @"x1";
 static NSString * const PTRectY1Key = @"y1";
 static NSString * const PTRectX2Key = @"x2";
@@ -252,6 +254,10 @@ static NSString * const PTTextSelectionQuadPointYKey = @"y";
 static NSString * const PTTextSelectionPageRangeBeginKey = @"begin";
 static NSString * const PTTextSelectionPageRangeEndKey = @"end";
 
+// DefaultEraserType keys
+static NSString * const PTInkEraserModeAllKey = @"annotationEraser";
+static NSString * const PTInkEraserModePointsKey = @"hybrideEraser";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -271,6 +277,9 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyId = @"id";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyName = @"name";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyIcon = @"icon";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
+
+// Contexts.
+static void *TabChangedContext = &TabChangedContext;
 
 // To access the saved signatures folder
 static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesManager_signatureDirectory";
@@ -294,6 +303,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)layoutChanged:(RNTPTDocumentView *)sender;
 - (void)textSearchStart:(RNTPTDocumentView *)sender;
 - (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(nullable NSDictionary *)textSelection;
+- (void)pageMoved:(RNTPTDocumentView *)sender pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+- (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSString *)currentTab;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
@@ -440,6 +451,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
 
+@property (nonatomic, copy, nullable) NSString *defaultEraserType;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -557,8 +570,6 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (void)setOverprint:(NSString *)overprint;
 
-- (void)setUrlExtraction:(BOOL)urlExtraction;
-
 - (void)setPageBorderVisibility:(BOOL)pageBorderVisibility;
 
 - (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid;
@@ -574,6 +585,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)findText:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp;
 
 - (void)cancelFindText;
+
+- (void)openSearch;
 
 - (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
 

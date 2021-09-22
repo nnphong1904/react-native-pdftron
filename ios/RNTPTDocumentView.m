@@ -111,6 +111,8 @@ NS_ASSUME_NONNULL_END
     _tempFilePaths = [[NSMutableArray alloc] init];
     
     _showSavedSignatures = YES;
+
+    _userBookmarksListEditingEnabled = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -215,7 +217,6 @@ NS_ASSUME_NONNULL_END
             
             self.viewController = collaborationViewController;
             self.documentViewController = collaborationViewController;
-            [self addMissingPencilToolToDocumentController:collaborationViewController];
         } else {
             if ([self isMultiTabEnabled]) {
                 PTTabbedDocumentViewController *tabbedDocumentViewController = [[PTTabbedDocumentViewController alloc] init];
@@ -233,7 +234,6 @@ NS_ASSUME_NONNULL_END
                 
                 self.viewController = documentViewController;
                 self.documentViewController = documentViewController;
-                [self addMissingPencilToolToDocumentController:documentViewController];
             }
         }
         
@@ -244,6 +244,7 @@ NS_ASSUME_NONNULL_END
             [self registerForPDFViewCtrlNotifications:self.documentViewController];
         } else {
             // Using tabbed viewer.
+            [self registerForTabbedDocumentViewControllerNotifications:self.tabbedDocumentViewController];
         }
     }
     
@@ -433,6 +434,7 @@ NS_ASSUME_NONNULL_END
     
     if (self.tabbedDocumentViewController) {
         [self.tabbedDocumentViewController.tabManager saveItems];
+        [self deregisterForTabbedDocumentViewControllerNotifications:self.tabbedDocumentViewController];
     }
     
     UINavigationController *navigationController = self.viewController.navigationController;
@@ -561,6 +563,17 @@ NS_ASSUME_NONNULL_END
                    name:NSUndoManagerDidRedoChangeNotification
                  object:undoManager];
 }
+
+- (void)registerForTabbedDocumentViewControllerNotifications:(PTTabbedDocumentViewController *)tabbedDocumentViewController
+{
+    [tabbedDocumentViewController addObserver:self forKeyPath:@"tabManager.selectedIndex" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:TabChangedContext];
+}
+
+- (void)deregisterForTabbedDocumentViewControllerNotifications:(PTTabbedDocumentViewController *)tabbedDocumentViewController
+{
+    [tabbedDocumentViewController removeObserver:self forKeyPath:@"tabManager.selectedIndex" context:TabChangedContext];
+}
+
 
 #pragma mark - Disabling elements
 
@@ -703,13 +716,33 @@ NS_ASSUME_NONNULL_END
     }
     
     if (annotTypes.count > 0) {
-        //documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
+        documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
     }
 }
 
 - (void)setInkMultiStrokeEnabled:(BOOL)inkMultiStrokeEnabled
 {
     _inkMultiStrokeEnabled = inkMultiStrokeEnabled;
+}
+
+- (void)setDefaultEraserType:(NSString *)defaultEraserType
+{
+    _defaultEraserType = defaultEraserType;
+    
+    if (self.currentDocumentViewController) {
+        [self applyDefaultEraserType:defaultEraserType documentViewController:self.currentDocumentViewController];
+    }
+}
+
+- (void)applyDefaultEraserType:(NSString *)defaultEraserType documentViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
+    if ([defaultEraserType isEqualToString:PTInkEraserModeAllKey]) {
+        toolManager.eraserMode = PTInkEraserModeAll;
+    } else if ([defaultEraserType isEqualToString:PTInkEraserModePointsKey]) {
+        toolManager.eraserMode = PTInkEraserModePoints;
+    }
 }
 
 #pragma mark - Disabled tools
@@ -2019,6 +2052,9 @@ NS_ASSUME_NONNULL_END
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+    
+    // Set Default Eraser Type
+    [self applyDefaultEraserType:self.defaultEraserType documentViewController:documentViewController];
 
     // Enable/disable restoring state (last read page).
     [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
@@ -2361,11 +2397,6 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)setUrlExtraction:(BOOL)urlExtraction
-{
-    [self.documentViewController.pdfViewCtrl SetUrlExtraction:urlExtraction];
-}
-
 - (void)setPageBorderVisibility:(BOOL)pageBorderVisibility
 {
     PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
@@ -2424,66 +2455,6 @@ NS_ASSUME_NONNULL_END
         [pdfViewCtrl
          SetBackgroundColor:[backgroundColor[PTColorRedKey] unsignedCharValue] g:[backgroundColor[PTColorGreenKey] unsignedCharValue] b:[backgroundColor[PTColorBlueKey] unsignedCharValue] a:255];
     }
-}
-
-#pragma mark - Missing PencilKit workaround
-
--(void)addMissingPencilToolToDocumentController:(PTDocumentController*)documentController
-{
-    NSMutableArray<UIBarButtonItem*>* defaultAnnotateGroupTools = [documentController.toolGroupManager.annotateItemGroup.barButtonItems mutableCopy];
-    NSMutableArray<UIBarButtonItem*>* defaultDrawGroupTools = [documentController.toolGroupManager.drawItemGroup.barButtonItems mutableCopy];
-    NSMutableArray<UIBarButtonItem*>* newAnnotateGroupTools = [[NSMutableArray alloc] init];
-    NSMutableArray<UIBarButtonItem*>* newDrawGroupTools = [[NSMutableArray alloc] init];
-
-    for(UIBarButtonItem* defaultToolItem in defaultAnnotateGroupTools)
-    {
-        if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
-        {
-            PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
-            if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
-            {
-                continue;
-            }
-            else
-            {
-                [newAnnotateGroupTools addObject:defaultToolItem];
-            }
-        }
-        else
-        {
-            [newAnnotateGroupTools addObject:defaultToolItem];
-        }
-    }
-
-    for(UIBarButtonItem* defaultToolItem in defaultDrawGroupTools)
-    {
-        if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
-        {
-            PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
-            if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
-            {
-                continue;
-            }
-            else
-            {
-                [newDrawGroupTools addObject:defaultToolItem];
-            }
-        }
-        else
-        {
-            [newDrawGroupTools addObject:defaultToolItem];
-        }
-    }
-    if (@available(iOS 13.1, *)) {
-        if (documentController.toolManager.freehandUsesPencilKit) {
-            UIBarButtonItem* pencilItem = [documentController.toolGroupManager createItemForToolClass:[PTPencilDrawingCreate class]];
-            [newAnnotateGroupTools insertObject:pencilItem atIndex:2];
-            [newDrawGroupTools insertObject:pencilItem atIndex:0];
-        }
-    }
-
-    documentController.toolGroupManager.annotateItemGroup.barButtonItems = newAnnotateGroupTools;
-    documentController.toolGroupManager.drawItemGroup.barButtonItems = newDrawGroupTools;
 }
 
 #pragma mark - Custom headers
@@ -2904,7 +2875,6 @@ NS_ASSUME_NONNULL_END
         PTDocumentController *documentController = (PTDocumentController *)documentViewController;
         
         documentController.delegate = self;
-        [self addMissingPencilToolToDocumentController:documentController];
     }
     
     [self applyViewerSettings:documentViewController];
@@ -2928,6 +2898,21 @@ NS_ASSUME_NONNULL_END
 {
     // Always show tab bar when using tabbed viewer.
     return NO;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == TabChangedContext) {
+        if ([self.delegate respondsToSelector:@selector(tabChanged:currentTab:)]) {
+            PTDocumentTabItem *selectedItem = self.tabbedDocumentViewController.tabManager.selectedItem;
+            if (selectedItem != nil) {
+                NSURL *currentTab = selectedItem.documentURL ?: selectedItem.sourceURL;
+                [self.delegate tabChanged:self currentTab:[currentTab absoluteString]];
+            }
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 #pragma mark - <PTDocumentViewControllerDelegate>
@@ -3084,10 +3069,15 @@ NS_ASSUME_NONNULL_END
 
 - (void)rnt_documentViewControllerLayoutDidChange:(PTDocumentBaseViewController *)documentViewController
 {
-    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
-    
     if ([self.delegate respondsToSelector:@selector(layoutChanged:)]) {
         [self.delegate layoutChanged:self];
+    }
+}
+
+- (void)rnt_documentViewControllerPageDidMove:(PTDocumentBaseViewController *)documentViewController pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+{
+    if ([self.delegate respondsToSelector:@selector(pageMoved:pageMovedFromPageNumber:toPageNumber:)]) {
+        [self.delegate pageMoved:self pageMovedFromPageNumber:oldPageNumber toPageNumber:newPageNumber];
     }
 }
 
@@ -3146,8 +3136,8 @@ NS_ASSUME_NONNULL_END
         uniqueId = [uniqueIdObj GetAsPDFText];
     }
     
-    PTPDFRect *screenRect = [pdfViewCtrl GetScreenRectForAnnot:annot
-                                                      page_num:pageNumber];
+    PTPDFRect *screenRect = [pdfViewCtrl GetScreenRectForAnnot:annot page_num:pageNumber];
+    PTPDFRect *pageRect = [self convertScreenRectToPageRect:screenRect pageNumber:pageNumber pdfViewCtrl:pdfViewCtrl];
     
     NSString *annotationType = [RNTPTDocumentView stringForAnnotType:[annot GetType]];
     
@@ -3155,13 +3145,36 @@ NS_ASSUME_NONNULL_END
         PTAnnotationIdKey: (uniqueId ?: @""),
         PTAnnotationPageNumberKey: @(pageNumber),
         PTAnnotationTypeKey: annotationType,
-        PTRectKey: @{
+        PTScreenRectKey: @{
                 PTRectX1Key: @([screenRect GetX1]),
                 PTRectY1Key: @([screenRect GetY1]),
                 PTRectX2Key: @([screenRect GetX2]),
                 PTRectY2Key: @([screenRect GetY2]),
+                PTRectWidthKey: @([screenRect Width]),
+                PTRectHeightKey: @([screenRect Height]),
+        },
+        PTPageRectKey: @{
+                PTRectX1Key: @([pageRect GetX1]),
+                PTRectY1Key: @([pageRect GetY1]),
+                PTRectX2Key: @([pageRect GetX2]),
+                PTRectY2Key: @([pageRect GetY2]),
+                PTRectWidthKey: @([pageRect Width]),
+                PTRectHeightKey: @([pageRect Height]),
         },
     };
+}
+
+- (PTPDFRect*)convertScreenRectToPageRect:(PTPDFRect*)screenRect pageNumber:(int)pageNumber pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl
+{
+    PTPDFPoint *screenRectPt1 = [[PTPDFPoint alloc] initWithPx:[screenRect GetX1] py:[screenRect GetY1]];
+    PTPDFPoint *screenRectPt2 = [[PTPDFPoint alloc] initWithPx:[screenRect GetX2] py:[screenRect GetY2]];
+    
+    PTPDFPoint *pageRectPt1 = [pdfViewCtrl ConvScreenPtToPagePt:screenRectPt1 page_num:pageNumber];
+    PTPDFPoint *pageRectPt2 = [pdfViewCtrl ConvScreenPtToPagePt:screenRectPt2 page_num:pageNumber];
+    
+    PTPDFRect* pageRect = [[PTPDFRect alloc] initWithX1:[pageRectPt1 getX] y1:[pageRectPt1 getY] x2:[pageRectPt2 getX] y2:[pageRectPt2 getY]];
+    
+    return pageRect;
 }
 
 - (NSArray<NSDictionary<NSString *, id> *> *)annotationDataForAnnotations:(NSArray<PTAnnot *> *)annotations pageNumber:(int)pageNumber pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl overrideAction:(bool)overrideAction
@@ -4648,6 +4661,11 @@ NS_ASSUME_NONNULL_END
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     
     [pdfViewCtrl CancelFindText];
+}
+
+- (void)openSearch
+{
+    [self.currentDocumentViewController showSearchViewController];
 }
 
 - (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;

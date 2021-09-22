@@ -1016,21 +1016,6 @@ RCT_REMAP_METHOD(setOverprint,
     }
 }
 
-RCT_REMAP_METHOD(setUrlExtraction,
-                 setUrlExtractionForDocumentViewTag: (nonnull NSNumber *) tag
-                 urlExtraction:(BOOL)urlExtraction
-                 resolver:(RCTPromiseResolveBlock)resolve
-                 rejector:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        [[self documentViewManager] setUrlExtractionForDocumentViewTag:tag urlExtraction:urlExtraction];
-        resolve(nil);
-    }
-    @catch (NSException *exception) {
-        reject(@"set_url_extraction", @"Failed to set url extraction", [self errorFromException:exception]);
-    }
-}
-
 RCT_REMAP_METHOD(setPageBorderVisibility,
                  setPageBorderVisibilityForDocumentViewTag: (nonnull NSNumber *) tag
                  pageBorderVisibility:(BOOL)pageBorderVisibility
@@ -1151,6 +1136,20 @@ RCT_REMAP_METHOD(cancelFindText,
     }
     @catch (NSException *exception) {
         reject(@"cancel_text", @"Failed to cancel text search", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openSearch,
+                 openSearchForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openSearchForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_search", @"Failed to open search", [self errorFromException:exception]);
     }
 }
 

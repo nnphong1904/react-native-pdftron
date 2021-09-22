@@ -95,7 +95,7 @@ RNPdftron.clearRubberStampCache().then(() => {
 ```
 
 ### encryptDocument
-Encrypts (password-protect) a document. **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
+Encrypts (password-protect) a document (must be a PDF). **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
 
 Parameters:
 
@@ -225,10 +225,15 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
 />
 ```
 #### defaultEraserType
-string, optional
+one of the [`Config.EraserType`](./src/Config/Config.js) constants, optional
 
-Sets the default eraser tool type. Value only applied after a clean install. Android only.
-Example:
+Sets the default eraser tool type. Value only applied after a clean install.
+
+Eraser Type | Description
+--- | ---
+`annotationEraser` | Erases everything as an object; if you touch ink, the entire object is erased.
+`hybrideEraser` | Erases ink by pixel, but erases other annotation types as objects.
+`inkEraser` | Erases ink by pixel only. Android only.
 
 ```js
 <DocumentView
@@ -510,7 +515,7 @@ Defines whether to show the toolbar switcher in the top toolbar.
 ```
 
 #### initialToolbar
-string, optional, defaults to none
+one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object, optional, defaults to none
 
 Defines which [`annotationToolbar`](#annotationToolbars) should be selected when the document is opened.
 
@@ -589,7 +594,7 @@ Defines whether the viewer will add padding to take account of the system status
 ### Layout
 
 #### fitMode
-one of the [`Config.FitMode`](./src/Config/Config.js) constants, optional, default value is 'FitWidth'
+one of the [`Config.FitMode`](./src/Config/Config.js) constants, optional, default value is `Config.FitMode.FitWidth`
 
 Defines the fit mode (default zoom level) of the viewer.
 
@@ -600,7 +605,7 @@ Defines the fit mode (default zoom level) of the viewer.
 ```
 
 #### layoutMode
-one of the [`Config.LayoutMode`](./src/Config/Config.js) constants, optional, default value is 'Continuous'
+one of the [`Config.LayoutMode`](./src/Config/Config.js) constants, optional, default value is `Config.LayoutMode.Continuous`
 
 Defines the layout mode of the viewer.
 
@@ -696,6 +701,26 @@ pageNumber | int | the current page number
 <DocumentView
   onPageChanged = {({previousPageNumber, pageNumber}) => {
     console.log('Page number changes from', previousPageNumber, 'to', pageNumber);
+  }}
+/>
+```
+
+#### onPageMoved
+function, optional
+
+This function is called when a page has been moved in the document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+previousPageNumber | int | the previous page number
+pageNumber | int | the current page number
+
+```js
+<DocumentView
+  onPageMoved = {({previousPageNumber, pageNumber}) => {
+    console.log('Page moved from', previousPageNumber, 'to', pageNumber);
   }}
 />
 ```
@@ -807,7 +832,7 @@ Whether to show images in reflow mode.
 ```
 
 #### reflowOrientation
-one of the [`Config.ReflowOrientation`](./src/Config/Config.js) constants, optional, default value is 'Horizontal'. Android only.
+one of the [`Config.ReflowOrientation`](./src/Config/Config.js) constants, optional, default value is `Config.ReflowOrientation.Horizontal`. Android only.
 
 Sets the scrolling direction of the reflow control.
 
@@ -862,7 +887,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 annotationMenu | string | One of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, representing which item has been pressed
-annotations | array | An array of `{id: string, pageNumber: number, type: string, rect: object}` objects, where `id` is the annotation identifier, `pageNumber` is the page number, type is one of the [`Config.Tools`](./src/Config/Config.js) constants and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect
+annotations | array | An array of `{id: string, pageNumber: number, type: string, screenRect: object, pageRect: object}` objects.<br><br>`id` is the annotation identifier and `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`. Both rects are represented with `{x1: number, y1: number, x2: number, y2: number, width: number, height: number}` objects.
 
 ```js
 <DocumentView
@@ -872,7 +897,8 @@ annotations | array | An array of `{id: string, pageNumber: number, type: string
       console.log('The id of selected annotation is', annotation.id);
       console.log('The page number of selected annotation is', annotation.pageNumber);
       console.log('The type of selected annotation is', annotation.type);
-      console.log('The lower left corner of selected annotation is', annotation.x1, annotation.y1);
+      console.log('The screenRect of selected annotation is', annotation.screenRect);
+      console.log('The pageRect of selected annotation is', annotation.pageRect);
     });
   }}
 />
@@ -966,7 +992,7 @@ Data param table:
 Action | Data param
 --- | ---
 [`Config.Actions.linkPress`](./src/Config/Config.js) | `{url: string}`
-[`Config.Actions.stickyNoteShowPopUp`](./src/Config/Config.js) | `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
+[`Config.Actions.stickyNoteShowPopUp`](./src/Config/Config.js) | `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
 <DocumentView
@@ -1001,7 +1027,7 @@ Set the tab title if [`multiTabEnabled`](#multiTabEnabled) is true.
 
 ```js
 <DocumentView
-  multiTabEnabled={true} // requirement
+  multiTabEnabled={true}
   tabTitle={'tab1'}
 />
 ```
@@ -1013,8 +1039,31 @@ Sets the limit on the maximum number of tabs that the viewer could have at a tim
 
 ```js
 <DocumentView
-  multiTabEnabled={true} // requirement
+  multiTabEnabled={true}
   maxTabCount={5}
+/>
+```
+
+#### onTabChanged
+function, optional
+
+The function is activated when a tab is changed. 
+
+Please note that this API is meant for tab-specific changes. If you would like to know when the document finishes loading instead, see the [`onDocumentLoaded`](#onDocumentLoaded) event.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+currentTab | string | The file path of current tab's document
+
+
+```js
+<DocumentView
+  multiTabEnabled={true}
+  onTabChanged={({currentTab}) => {
+    console.log("The current tab is ", currentTab);
+  }}
 />
 ```
 
@@ -1171,7 +1220,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`, representing the selected annotations. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
 <DocumentView
@@ -1180,7 +1229,6 @@ annotations | array | array of annotation data in the format `{id: string, pageN
       console.log('The id of selected annotation is', annotation.id);
       console.log('It is in page', annotation.pageNumber);
       console.log('Its type is', annotation.type);
-      console.log('Its lower left corner has coordinate', annotation.rect.x1, annotation.rect.y1);
     });
   }}
 />
@@ -1259,22 +1307,7 @@ Defines annotation types that cannot be edited after creation.
 #### excludedAnnotationListTypes
 array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines types to be excluded from the annotation list. This feature will be soon be added to the official iOS release; to access it in the meantime, you can use the following podspec in the Podfile:
-```
-pod 'PDFNet', podspec: 'https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-08-04/9.0/cocoapods/xcframeworks/pdfnet/2021-08-04_stable_rev77892.podspec'
-```
-
-and uncomment the following line in `ios/RNTPTDocumentView.m`:
-```objc
-- (void)excludeAnnotationListTypes:(NSArray<NSString*> *)excludedAnnotationListTypes documentViewController:(PTDocumentBaseViewController *)documentViewController
-{
-    ...
-    if (annotTypes.count > 0) {
-        //documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
-    }
-}
-```
-
+Defines types to be excluded from the annotation list.
 Example use:
 
 ```js
@@ -1840,6 +1873,17 @@ Returns a Promise.
 this._viewer.rotateCounterClockwise();
 ```
 
+#### showRotateDialog
+Displays a rotate dialog. Android only.
+
+The dialog allows users to rotate pages of the opened document by 90, 180 and 270 degrees. It also displays a thumbnail of the current page at the selected rotation angle.
+
+Returns a Promise.
+
+```js
+this._viewer.showRotateDialog();
+```
+
 ### Import/Export Annotations
 
 #### importAnnotationCommand
@@ -2140,7 +2184,7 @@ this._viewer.setHighlightFields(true);
 ```
 
 
-#### getAnnotationAt
+#### getAnnotationAtPoint
 Gets an annotation at the (x, y) position in screen coordinates, if any.
 
 Parameters:
@@ -2158,10 +2202,10 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotation | object | the annotation found in the format of `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
+annotation | object | the annotation found in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
-this._viewer.getAnnotationAt(167, 287, 100, 10).then((annotation) => {
+this._viewer.getAnnotationAtPoint(167, 287, 100, 10).then((annotation) => {
   if (annotation) {
     console.log('Annotation found at point (167, 287) has id:', annotation.id);
   }
@@ -2169,7 +2213,7 @@ this._viewer.getAnnotationAt(167, 287, 100, 10).then((annotation) => {
 ```
 
 #### getAnnotationListAt
-Gets the list of annotations at a given line in screen coordinates. Note that this is not an area selection. It should be used similar to [`getAnnotationAt`](#getAnnotationAt), except that this should be used when you want to get multiple annotations which are overlaying with each other.
+Gets the list of annotations at a given line in screen coordinates. Note that this is not an area selection. It should be used similar to [`getAnnotationAtPoint`](#getAnnotationAtPoint), except that this should be used when you want to get multiple annotations which are overlaying with each other.
 
 Parameters:
 
@@ -2186,7 +2230,7 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | list of annotations at the target line, each in the format of `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
+annotations | array | list of annotations at the target line, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
 this._viewer.getAnnotationListAt(0, 0, 200, 200).then((annotations) => {
@@ -2196,7 +2240,7 @@ this._viewer.getAnnotationListAt(0, 0, 200, 200).then((annotations) => {
 })
 ```
 
-#### getAnnotationListOnPage
+#### getAnnotationsOnPage
 Gets the list of annotations on a given page.
 
 Parameters:
@@ -2211,10 +2255,10 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
+annotations | array | list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
-this._viewer.getAnnotationListOnPage(2).then((annotations) => {
+this._viewer.getAnnotationsOnPage(2).then((annotations) => {
   for (const annotation of annotations) {
     console.log('Annotation found on page 2 has id:', annotation.id);
   }
@@ -2713,19 +2757,6 @@ this._viewer.setOverprint(Config.OverprintMode.Off);
 
 ### Viewer Options
 
-#### setUrlExtraction
-Sets whether to extract urls from the current document, which is disabled by default. It is recommended to set this value before document is opened.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-urlExtraction | bool | whether to extract urls from the current document
-
-```js
-this._viewer.setUrlExtraction(true);
-```
-
 #### setPageBorderVisibility
 Sets whether borders of each page are visible in the viewer, which is disabled by default.
 
@@ -2832,6 +2863,15 @@ Returns a Promise.
 
 ```js
 this._viewer.cancelFindText();
+```
+
+#### openSearch
+Displays a search bar that allows the user to enter and search text within a document.
+
+Returns a Promise.
+
+```js
+this._viewer.openSearch();
 ```
 
 #### getSelection
@@ -3074,7 +3114,9 @@ this._viewer.getSavedSignatures().then((signatures) => {
 ```
 
 #### getSavedSignatureFolder
-Retrieves the absolute file path to the folder containing the saved signatures
+Retrieves the absolute file path to the folder containing the saved signature PDFs.
+
+For Android, to get the folder containing the saved signature JPGs, use [`getSavedSignatureJpgFolder`](#getSavedSignatureJpgFolder).
 
 Returns a Promise.
 
@@ -3086,6 +3128,27 @@ path | string | the absolute file path to the folder
 
 ```js
 this._viewer.getSavedSignatureFolder().then((path) => {
+  if (path != null) {
+    console.log(path);
+  }
+})
+```
+
+#### getSavedSignatureJpgFolder
+Retrieves the absolute file path to the folder containing the saved signature JPGs. Android only.
+
+To get the folder containing the saved signature PDFs, use [`getSavedSignatureFolder`](#getSavedSignatureFolder).
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | the absolute file path to the folder
+
+```js
+this._viewer.getSavedSignatureJpgFolder().then((path) => {
   if (path != null) {
     console.log(path);
   }
@@ -3137,8 +3200,6 @@ this._viewer.openOutlineList();
 
 #### openLayersList
 On Android it displays the layers dialog while on iOS it displays the layers tab of the existing list container. If this tab has been disabled or there are no layers in the document, the method does nothing.
-
-**Note** For proper functionality the PDFNet podspec with: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-07-16/9.0/cocoapods/pdfnet/2021-07-16_stable_rev77863.podspec
 
 Returns a Promise.
 

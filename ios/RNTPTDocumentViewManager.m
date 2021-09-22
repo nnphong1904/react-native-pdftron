@@ -530,6 +530,14 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.defaultEraserType = [RCTConvert NSString:json];
+    }
+}
+
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
@@ -635,6 +643,16 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
         });
     }
 }
+- (void)pageMoved:(RNTPTDocumentView *)sender pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onPageMoved" : @"onPageMoved",
+            @"previousPageNumber" : @(oldPageNumber),
+            @"pageNumber" : @(newPageNumber),
+        });
+    }
+}
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *,id> *> *)annotations
 {
@@ -723,6 +741,16 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
             });
         }
         
+    }
+}
+
+- (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSString *)currentTab
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onTabChanged": @"onTabChanged",
+            @"currentTab": currentTab,
+        });
     }
 }
 
@@ -1508,16 +1536,6 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
-- (void)setUrlExtractionForDocumentViewTag:(NSNumber *)tag urlExtraction:(BOOL)urlExtraction
-{
-    RNTPTDocumentView *documentView = self.documentViews[tag];
-    if (documentView) {
-        [documentView setUrlExtraction:urlExtraction];
-    } else {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
-    }
-}
-
 - (void)setPageBorderVisibilityForDocumentViewTag:(NSNumber *)tag pageBorderVisibility:(BOOL)pageBorderVisibility
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
@@ -1593,6 +1611,16 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         [documentView cancelFindText];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)openSearchForDocumentViewTag:(NSNumber *)tag;
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView openSearch];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
